@@ -2,7 +2,6 @@ from Node import Node
 from BinaryTree import BinaryTree
 
 class Splay(BinaryTree):
-
     def zig(self, parent, node):
         if node.right is None and node.left is None:
             node.parent.left = None

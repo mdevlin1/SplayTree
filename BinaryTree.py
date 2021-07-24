@@ -1,11 +1,15 @@
 from Node import Node
 
+'''
+Basic BinaryTree implementation
+'''
 class BinaryTree():
-    
     def __init__(self):
+        # Initializes root node
         self.root = None
 
     def insert(self, value):
+        # If the tree is empty, then add a root node
         if self.root is None:
             self.root = Node(value, None)
 
