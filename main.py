@@ -18,6 +18,9 @@ def main():
         for row in value_reader:
             for value in row:
                 tree.insert(value)
+    
+    # Prints out information about the tree
+    tree.print()
 
 if __name__ == '__main__':
     main()
