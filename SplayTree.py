@@ -1,7 +1,13 @@
+'''
+Splay tree algorithm inspired by https://en.wikipedia.org/wiki/Splay_tree
+'''
 from Node import Node
 from BinaryTree import BinaryTree
 
 class Splay(BinaryTree):
+    def __init__( self ):
+        ''' Splay tree constructor'''
+        BinaryTree.__init__( self )
 
     def insert(self, value):
         '''
@@ -25,24 +31,25 @@ class Splay(BinaryTree):
         node : Node
             Splay tree node
         '''
-        node_right = node.right
-        if node_right:
-            node.right = node.left
-            if node.left:
-                node_right.left.parent = node
-            node_right.parent = node.parent
+        child_node = node.right
+        if child_node:
+            node.right = child_node.left
+            if child_node.left:
+                child_node.left.parent = node
+            child_node.parent = node.parent
 
         if not node.parent:
-            self.root = node_right
+            self.root = child_node
         elif node == node.parent.left:
-            node.parent.left = node_right
+            node.parent.left = child_node
         else:
-            node.parent.right = node_right
+            node.parent.right = child_node
         
-        if node_right:
-            node.left = node
-        node.parent = node_right
-  
+        if child_node:
+            child_node.left = node
+        node.parent = child_node
+
+
     def right_rotate(self, node):
         '''
         Splay tree right rotate method
@@ -52,24 +59,24 @@ class Splay(BinaryTree):
         node : Node
             Splay tree node
         '''
-        node_left = node.left
-        if node_left:
-            node.left = node_left.right
-            if node_left.right:
-                node_left.right.parent = node
-            node_left.parent = node.parent
+        child_node = node.left
+        if child_node:
+            node.left = child_node.right
+            if child_node.right:
+                child_node.right.parent = node
+            child_node.parent = node.parent
         
         if not node.parent:
-            self.root = node_left
+            self.root = child_node
         elif node == node.parent.left:
-            node.parent.left = node_left
+            node.parent.left = child_node
         else:
-            node.parent.right = node_left
+            node.parent.right = child_node
         
-        if node_left:
-            node_left.right = node
+        if child_node:
+            child_node.right = node
         
-        node.parent = node_left
+        node.parent = child_node
 
     def splay(self, node):
         '''
@@ -80,7 +87,7 @@ class Splay(BinaryTree):
         node : Node
             Splay tree node
         '''
-        while node.parent:
+        while node and node.parent:
             if not node.parent.parent:
                 if node.parent.left == node:
                     self.right_rotate(node.parent)

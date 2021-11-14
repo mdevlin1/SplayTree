@@ -1,4 +1,5 @@
 from Node import Node
+from ctypes import c_int64
 
 '''
 Basic BinaryTree implementation
@@ -82,14 +83,27 @@ class BinaryTree():
     def print(self):
         '''
         Prints a binary tree
+        
+        Returns
+        -------
+        int
+            Number of items in the binary tree
         '''
         # Depth of the tree at root level
         depth = 0
         print("Value: ", self.root.value, ", Depth: ", depth )
-        self.printRecursive(self.root.left, depth)
-        self.printRecursive(self.root.right, depth)
+        # TODO: This is a hacky way of avoiding pass by value. Ctypes
+        # uint64 are mutable, therefore you can pass by reference. This
+        # is convenient for finding the number of nodes in a binary tree. 
+        node_counter = c_int64(1)
+
+        self.printRecursive(self.root.left, depth, node_counter)
+        self.printRecursive(self.root.right, depth, node_counter)
+
+        return node_counter.value
+
     
-    def printRecursive(self, node, depth):
+    def printRecursive(self, node, depth=None, node_counter=None):
         '''
         Recursive print method
 
@@ -99,13 +113,19 @@ class BinaryTree():
             Binary tree node
         depth : int
             depth of the current node
+        node_counter : int
+            running count of the nodes since intiating recursion
         '''
         if node is None:
             # Break out of recursion
             return
         else:
-            # Depth of the tree at the current iteration
-            depth += 1
+            if depth:
+                # Depth of the tree at the current iteration
+                depth += 1
+            if node_counter:
+                node_counter.value += 1 
+
             print("Value: ", node.value, ", Depth: ", depth )
-            self.printRecursive(node.left, depth)
-            self.printRecursive(node.right, depth)
+            self.printRecursive(node.left, depth, node_counter )
+            self.printRecursive(node.right, depth, node_counter )
